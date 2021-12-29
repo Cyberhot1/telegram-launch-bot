@@ -20,23 +20,29 @@ to add new data, delete the previous data using</i> /delete
 '''
 
 ALERT_TEXT = '''
-<i>Hei please give me specification of what data you want to save while replying to the message!</i>
+<i>Hi please give me specification of what data you want to save while replying to the message!</i>
 
 <b>Example:</b>
-<code>/save today</code> - to save today data
-<code>/save tomorrow</code> - to save tomorrow data
-<code>/save legit</code> - to save legit project
-<code>/save verified</code> - to save verified project
+<code>/save todaylaunchlist</code> - to save today data
+<code>/save tomorrowlaunchlist</code> - to save tomorrow data
+<code>/save legitprojects</code> - to save legit project
+<code>/save verifiedprojects</code> - to save verified project
+<code>/save doxxedprojects</code> - to save doxxed projects
+<code>/save promotion</code> - to save promoted projects
+
 '''
 
 DELETE_ALERT = '''
-<i>Hei please give me specification of what data you want to delete!</i>
+<i>Hi please give me specification of what data you want to delete!</i>
 
 <b>Example:</b>
-<code>/delete today</code> - to delete today data
-<code>/delete tomorrow</code> - to delete tomorrow data
-<code>/delete legit</code> - to delete legit project
-<code>/delete verified</code> - to delete verified project
+<code>/delete todaylaunchlist</code> - to delete today data
+<code>/delete tomorrowlaunchlist</code> - to delete tomorrow data
+<code>/delete legitprojects</code> - to delete legit project
+<code>/delete verifiedprojects</code> - to delete verified project
+<code>/delete doxxedprojects</code> - to delete doxxed project
+<code>/delete promotion</code> - to delete promoted project
+
 <code>/delete all</code> - to delete all data
 '''
 
@@ -68,7 +74,7 @@ def save_command(update, context):
 	query = context.args
 	if msg.reply_to_message:
 		reply = msg.reply_to_message
-		if not query or query[0] not in ['today', 'tomorrow', 'legit', 'verified']:
+		if not query or query[0] not in ['todaylaunchlist', 'tomorrowlaunchlist', 'legitprojects', 'verifiedprojects', 'doxxedprojects', 'promotion']:
 			context.bot.send_message (
 				chat_id = msg.chat_id,
 				text = ALERT_TEXT,
@@ -76,7 +82,7 @@ def save_command(update, context):
 				reply_to_message_id = msg.message_id
 			)
 			return
-		elif query[0] == 'today':
+		elif query[0] == 'todaylaunchlist':
 			check = db.check_data(100)
 			if check:
 				msg.reply_text(
@@ -96,7 +102,7 @@ def save_command(update, context):
 						'<b>Failed</b>, <i>media that supported by me just a video and text!</i>',
 						parse_mode = ParseMode.HTML
 					)
-		elif query[0] == 'tomorrow':
+		elif query[0] == 'tomorrowlaunchlist':
 			check = db.check_data(200)
 			if check:
 				msg.reply_text(
@@ -116,7 +122,7 @@ def save_command(update, context):
 						'<b>Failed</b>, <i>media that supported by me just a video and text!</i>',
 						parse_mode = ParseMode.HTML
 					)
-		elif query[0] == 'legit':
+		elif query[0] == 'legitprojects':
 			check = db.check_data(300)
 			if check:
 				msg.reply_text (
@@ -136,7 +142,7 @@ def save_command(update, context):
 						'<b>Failed</b>, <i>media that supported by me just a video and text!</i>',
 						parse_mode = ParseMode.HTML
 					)
-		elif query[0] == 'verified':
+		elif query[0] == 'verifiedprojects':
 			check = db.check_data(400)
 			if check:
 				msg.reply_text (
@@ -147,6 +153,46 @@ def save_command(update, context):
 				data = data_sorting(reply)
 				if data is not None:
 					db.add_data(400, data['type'], data['file_id'], data['caption'])
+					msg.reply_text(
+						'<b>Success</b>, <i>data is saved inside database</i>',
+						parse_mode = ParseMode.HTML
+					)
+				else:
+					msg.reply_text(
+						'<b>Failed</b>, <i>media that supported by me just a video and text!</i>',
+						parse_mode = ParseMode.HTML
+					)
+					elif query[0] == 'doxxedprojects':
+			check = db.check_data(500)
+			if check:
+				msg.reply_text (
+					EXISTS_TEXT,
+					parse_mode = ParseMode.HTML
+				)
+			else:
+				data = data_sorting(reply)
+				if data is not None:
+					db.add_data(500, data['type'], data['file_id'], data['caption'])
+					msg.reply_text(
+						'<b>Success</b>, <i>data is saved inside database</i>',
+						parse_mode = ParseMode.HTML
+					)
+				else:
+					msg.reply_text(
+						'<b>Failed</b>, <i>media that supported by me just a video and text!</i>',
+						parse_mode = ParseMode.HTML
+					)
+				elif query[0] == 'promotion':
+			check = db.check_data(600)
+			if check:
+				msg.reply_text (
+					EXISTS_TEXT,
+					parse_mode = ParseMode.HTML
+				)
+			else:
+				data = data_sorting(reply)
+				if data is not None:
+					db.add_data(600, data['type'], data['file_id'], data['caption'])
 					msg.reply_text(
 						'<b>Success</b>, <i>data is saved inside database</i>',
 						parse_mode = ParseMode.HTML
@@ -167,14 +213,14 @@ def save_command(update, context):
 def delete_command(update, context):
 	msg = update.message
 	query = context.args
-	if not query or query[0] not in ['today', 'tomorrow', 'legit', 'verified', 'all']:
+	if not query or query[0] not in ['todaylaunchlist', 'tomorrowlaunchlist', 'legitprojects', 'verifiedprojects', 'doxxedprojects', 'promotion', 'all']:
 		context.bot.send_message (
 			chat_id = msg.chat_id,
 			text = DELETE_ALERT,
 			parse_mode = ParseMode.HTML,
 			reply_to_message_id = msg.message_id
 		)
-	elif query[0] == 'today':
+	elif query[0] == 'todaylaunchlist':
 		check = db.check_data(100)
 		if check:
 			db.del_data(100)
@@ -191,7 +237,7 @@ def delete_command(update, context):
 				parse_mode = ParseMode.HTML,
 				reply_to_message_id = msg.message_id
 			)
-	elif query[0] == 'tomorrow':
+	elif query[0] == 'tomorrowlaunchlist':
 		check = db.check_data(200)
 		if check:
 			db.del_data(200)
@@ -208,7 +254,7 @@ def delete_command(update, context):
 				parse_mode = ParseMode.HTML,
 				reply_to_message_id = msg.message_id
 			)
-	elif query[0] == 'legit':
+	elif query[0] == 'legitprojetcs':
 		check = db.check_data(300)
 		if check:
 			db.del_data(300)
@@ -225,10 +271,44 @@ def delete_command(update, context):
 				parse_mode = ParseMode.HTML,
 				reply_to_message_id = msg.message_id
 			)
-	elif query[0] == 'verified':
+	elif query[0] == 'verifiedprojects':
 		check = db.check_data(400)
 		if check:
 			db.del_data(400)
+			context.bot.send_message (
+				chat_id = msg.chat.id,
+				text = '<b>Success,</b> <i>data is deleted.</i>',
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+		else:
+			context.bot.send_message (
+				chat_id = msg.chat.id,
+				text = '<b>Failed,</b> <i>data is already deleted.</i>',
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+	elif query[0] == 'doxxedprojects':
+		check = db.check_data(500)
+		if check:
+			db.del_data(500)
+			context.bot.send_message (
+				chat_id = msg.chat.id,
+				text = '<b>Success,</b> <i>data is deleted.</i>',
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+		else:
+			context.bot.send_message (
+				chat_id = msg.chat.id,
+				text = '<b>Failed,</b> <i>data is already deleted.</i>',
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+	elif query[0] == 'promotion':
+		check = db.check_data(600)
+		if check:
+			db.del_data(600)
 			context.bot.send_message (
 				chat_id = msg.chat.id,
 				text = '<b>Success,</b> <i>data is deleted.</i>',
@@ -260,7 +340,7 @@ def delete_command(update, context):
 				reply_to_message_id = msg.message_id
 			)
 
-def today_command(update, context):
+def todaylaunchlist_command(update, context):
 	msg = update.message
 	data = db.get_data(100)
 	print(data)
@@ -288,7 +368,7 @@ def today_command(update, context):
 				reply_to_message_id = msg.message_id
 			)
 
-def tomorrow_command(update, context):
+def tomorrowlaunchlist_command(update, context):
 	msg = update.message
 	data = db.get_data(200)
 	if not data:
@@ -315,7 +395,7 @@ def tomorrow_command(update, context):
 				reply_to_message_id = msg.message_id
 			)
 
-def legit_command(update, context):
+def legitprojects_command(update, context):
 	msg = update.message
 	data = db.get_data(300)
 	if not data:
@@ -342,9 +422,61 @@ def legit_command(update, context):
 				reply_to_message_id = msg.message_id
 			)
 
-def verified_command(update, context):
+def verifiedprojects_command(update, context):
 	msg = update.message
 	data = db.get_data(400)
+	if not data:
+		context.bot.send_message (
+			chat_id = msg.chat.id,
+			text = '<b>Sorry</b>, <i>currently there is no data available yet</i>',
+			parse_mode = ParseMode.HTML,
+			reply_to_message_id = msg.message_id
+		)
+	else:
+		if data[0][0] == 'video':
+			context.bot.send_video (
+				chat_id = msg.chat_id,
+				video = data[0][1],
+				caption = data[0][2],
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+		else:
+			context.bot.send_message (
+				chat_id = msg.chat_id,
+				text = data[0][2],
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+def doxxedprojects_command(update, context):
+	msg = update.message
+	data = db.get_data(500)
+	if not data:
+		context.bot.send_message (
+			chat_id = msg.chat.id,
+			text = '<b>Sorry</b>, <i>currently there is no data available yet</i>',
+			parse_mode = ParseMode.HTML,
+			reply_to_message_id = msg.message_id
+		)
+	else:
+		if data[0][0] == 'video':
+			context.bot.send_video (
+				chat_id = msg.chat_id,
+				video = data[0][1],
+				caption = data[0][2],
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+		else:
+			context.bot.send_message (
+				chat_id = msg.chat_id,
+				text = data[0][2],
+				parse_mode = ParseMode.HTML,
+				reply_to_message_id = msg.message_id
+			)
+def promotion_command(update, context):
+	msg = update.message
+	data = db.get_data(600)
 	if not data:
 		context.bot.send_message (
 			chat_id = msg.chat.id,
@@ -376,10 +508,12 @@ def main():
 
 	dp.add_handler(CommandHandler('save', save_command, filters = Filters.user(username = ADMIN_APPROVED)))
 	dp.add_handler(CommandHandler('delete', delete_command, filters = Filters.user(username = ADMIN_APPROVED)))
-	dp.add_handler(CommandHandler('today', today_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
-	dp.add_handler(CommandHandler('tomorrow', tomorrow_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
-	dp.add_handler(CommandHandler('legit', legit_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
-	dp.add_handler(CommandHandler('verified', verified_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
+	dp.add_handler(CommandHandler('todaylaunchlist', todaylaunchlist_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
+	dp.add_handler(CommandHandler('tomorrowlaunchlist', tomorrowlaunchlist_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
+	dp.add_handler(CommandHandler('legitprojects', legitprojects_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
+	dp.add_handler(CommandHandler('verifiedprojects', verifiedprojects_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
+	dp.add_handler(CommandHandler('doxxedprojects', doxxedprojects_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
+	dp.add_handler(CommandHandler('promotion', promotion_command, filters = Filters.chat(chat_id = CHAT_APPROVED)))
 
 	updater.start_polling(drop_pending_updates = True)
 	updater.idle()
