@@ -10,8 +10,9 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 db = DBHelper()
 
-BOT_TOKEN = 'put your bot token here'
-ADMIN_APPROVED = ['@isaiahttc']
+BOT_TOKEN = '5000065853:AAEaQcpO7kF68RkkARbVSwMtzLOXN_nPczU
+'
+ADMIN_APPROVED = ['@isaiahttc', '@unitiguardman', '@cryptomuscle']
 CHAT_APPROVED = [-1001501246286]
 
 EXISTS_TEXT = '''
