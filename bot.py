@@ -162,7 +162,7 @@ def save_command(update, context):
 						'<b>Failed</b>, <i>media that supported by me just a video and text!</i>',
 						parse_mode = ParseMode.HTML
 					)
-					elif query[0] == 'doxxedprojects':
+		elif query[0] == 'doxxedprojects':
 			check = db.check_data(500)
 			if check:
 				msg.reply_text (
@@ -182,7 +182,7 @@ def save_command(update, context):
 						'<b>Failed</b>, <i>media that supported by me just a video and text!</i>',
 						parse_mode = ParseMode.HTML
 					)
-				elif query[0] == 'promotion':
+		elif query[0] == 'promotion':
 			check = db.check_data(600)
 			if check:
 				msg.reply_text (
